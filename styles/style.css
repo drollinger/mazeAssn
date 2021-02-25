@@ -1,0 +1,65 @@
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+label {
+    display: table-cell;
+}
+
+input {
+    display: table-cell;
+}
+
+button{
+    background: none;
+    border: 2px solid #5d7876;
+    border-radius: 8px;
+    padding: 5px;
+    
+    -webkit-transition: all .1s ease;
+    -moz-transition: all .1s ease;
+    -ms-transition: all .1s ease;
+    transition: all .1s ease;
+    outline:none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+ 
+button:hover{
+    background: #5d7876;
+    color: #e8ebea;
+    box-shadow: 0 6px 8px 0 rgba(0,0,0,0.24), 0 8px 25px 0 rgba(0,0,0,0.19);
+}
+
+#console {
+    height: 300px;
+    width: 500px;
+    overflow: auto;
+    padding: 10px;
+}
+
+#inputSection {
+    padding: 10px;
+}
+
+#buttonBlock {
+    padding: 20px;
+}
+
+.inputRow {
+    padding: 5px;
+}
+
+.table-edge {
+    background-color: #7f95ba;
+}
+
+.butRow {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+
