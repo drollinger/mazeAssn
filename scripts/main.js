@@ -8,17 +8,19 @@
 function main() {
     //Initialize
     //  Create Maze
-    //  Create all other needed objects
     let input = Input();
     let graphics = Graphics();
     let maze = Maze();
-    maze.NewMaze(15);
+    maze.NewMaze(20);
+    let solution = maze.GetPath();
 
     let mazeRenderer = graphics.MazeRenderer( {
             maze : maze,
             imgFloor : 'images/floorTile3.png',
-            imgWall : 'images/hedge.png',
+            imgWall : 'images/wall2.png',
+            wallRatio : 5
         });
+
 
     let prevTime = performance.now();
     let keyInput = input.Keyboard();
@@ -41,6 +43,8 @@ function main() {
     function render() {
         graphics.clear();
         mazeRenderer.Render();
+        //mazeRenderer.RenderPaths();
+        mazeRenderer.RenderSolution(solution);
         //renderCharacter(myCharacter);
     };
     
