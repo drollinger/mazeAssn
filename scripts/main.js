@@ -16,9 +16,14 @@ function main() {
 
     let mazeRenderer = graphics.MazeRenderer( {
             maze : maze,
-            imgFloor : 'images/floorTile3.png',
-            imgWall : 'images/wall2.png',
-            wallRatio : 5
+            imgFloor : 'images/floorTile.png',
+            imgWall : 'images/wall.png',
+            wallRatio : 9
+        });
+
+    let characterRenderer = graphics.CharacterRenderer( {
+            character : character,
+            //imgcharacter : 'images/character.png',
         });
 
 
@@ -44,7 +49,7 @@ function main() {
         graphics.clear();
         mazeRenderer.Render();
         //mazeRenderer.RenderPaths();
-        mazeRenderer.RenderSolution(solution);
+        //mazeRenderer.RenderSolution(solution);
         //renderCharacter(myCharacter);
     };
     
