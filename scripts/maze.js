@@ -97,12 +97,15 @@ let Maze = function() {
             solution.push(node);
             node = node.parent;
         };
-        //Add parent -> subNode
-        solution.push(node);
-        node = subNode.node;
-        while (node != null) {
+        //Check if node is null if subNode remains root
+        if (node) {
+            //Add parent -> subNode
             solution.push(node);
-            node = getLongestPaths(node).first;
+            node = subNode.node;
+            while (node != null) {
+                solution.push(node);
+                node = getLongestPaths(node).first;
+            };
         };
     }
 

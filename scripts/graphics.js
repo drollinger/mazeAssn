@@ -163,8 +163,9 @@ let Graphics = function() {
         function RenderSolution(solution) {
             context.beginPath();
             for (let i = 0; i < solution.length-1; i++) {
-                context.moveTo((solution[i].x+0.5)*cLength (solution[i].y+0.5)*cLength);
-                context.lineTo((solution[i+1].x+0.5)*cLength, (solution[i+1].y+0.5)*cLength);
+                context.moveTo((solution[i]?.x+0.5)*cLength, (solution[i]?.y+0.5)*cLength);
+                context.lineTo((solution[i+1]?.x+0.5)*cLength, (solution[i+1]?.y+0.5)*cLength);
+                if(!solution[i]) { console.log(solution); };
             };
             context.closePath();
             context.strokeStyle = 'rgb(0, 255, 255)';
