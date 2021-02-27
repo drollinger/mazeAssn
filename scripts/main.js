@@ -9,27 +9,30 @@ function main() {
     //Initialize
     //  Create Maze
     let input = Input();
+    let keyInput = input.Keyboard();
     let graphics = Graphics();
     let maze = Maze();
-    maze.NewMaze(20);
+    maze.NewMaze(5);
     let solution = maze.GetPath();
 
-    let mazeRenderer = graphics.MazeRenderer( {
+    graphics.InitRenderer( {
             maze : maze,
-            imgFloor : 'images/floorTile.png',
-            imgWall : 'images/wall.png',
             wallRatio : 9
-        });
-
+    });
+    let character = {
+        x : solution[solution.length-1].x,
+        y : solution[solution.length-1].y,
+    };
     let characterRenderer = graphics.CharacterRenderer( {
             character : character,
-            //imgcharacter : 'images/character.png',
-        });
+    });
 
+    let mazeRenderer = graphics.MazeRenderer( {
+            imgFloor : 'images/floorTile.png',
+            imgWall : 'images/wall.png',
+    });
 
     let prevTime = performance.now();
-    let keyInput = input.Keyboard();
-
     //The Main Game Loop
     function gameLoop(timestamp) {
         let elapsedTime = timestamp - prevTime;
@@ -43,14 +46,15 @@ function main() {
     };
     
     function update(elapsedTime) {
+
     };
     
     function render() {
         graphics.clear();
         mazeRenderer.Render();
+        characterRenderer.Render();
         //mazeRenderer.RenderPaths();
         //mazeRenderer.RenderSolution(solution);
-        //renderCharacter(myCharacter);
     };
     
     function processInput(elapsedTime) {

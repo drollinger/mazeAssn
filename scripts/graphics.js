@@ -10,6 +10,11 @@ let Graphics = function() {
     
     let canvas = document.getElementById('canvas');
     let context = canvas.getContext('2d');
+    let maze;
+    let wallRatio;
+    let size;
+    let cLength;
+    let wThick;
 
     CanvasRenderingContext2D.prototype.clear = function() {
         this.save();
@@ -19,6 +24,14 @@ let Graphics = function() {
     };
     function clear() {
         context.clear();
+    }
+
+    function InitRenderer(spec) {
+        maze = spec.maze.GetMaze();
+        wallRatio = spec.wallRatio ?? 10;
+        size = spec.maze.GetSize();
+        cLength = Math.min(canvas.width, canvas.height)/size;
+        wThick = cLength/wallRatio;
     }
 
     function MazeRenderer(spec) {
@@ -35,14 +48,7 @@ let Graphics = function() {
             this.isReady = true;
         };
         imgWall.src = spec.imgWall;
-        let wallRatio = spec.wallRatio ?? 10;
 
-        let size = spec.maze.GetSize();
-        let maze = spec.maze.GetMaze();
-        let cWidth = canvas.width/size;
-        let cHeight = canvas.height/size;
-        let wThickW = canvas.width/size/wallRatio;
-        let wThickH = canvas.height/size/wallRatio;
         const coords = {
             '2':{sx:0, sy:0, ex:1, ey:0},
             '-1':{sx:1, sy:0, ex:1, ey:1},
@@ -70,8 +76,8 @@ let Graphics = function() {
         function drawFloor(cell) {
             if (imgFloor.isReady) {
                 context.drawImage(imgFloor,
-                        cell.x * cWidth, cell.y * cHeight,
-                        cWidth + 0.5, cHeight + 0.5
+                        cell.x * cLength, cell.y * cLength,
+                        cLength + 0.5, cLength + 0.5
                     );
                 if (cell.isStart) {
                     boxLightSquare(cell, 'rgba(98, 255, 84, 1)');
@@ -85,25 +91,25 @@ let Graphics = function() {
         function boxLightSquare(cell, color) {
             let adj = cell.parent ?? cell.children[0];
             let openEdge = coords[(cell.x-adj.x)+2*(cell.y-adj.y)];
-            let x = cell.x*cWidth;
-            let y = cell.y*cHeight;
+            let x = cell.x*cLength;
+            let y = cell.y*cLength;
 
             let grd = context.createLinearGradient(
-                    x+(cHeight*openEdge.ey), y+(cWidth*openEdge.sx), 
-                    x+(cHeight*openEdge.sy), y+(cWidth*openEdge.ex), 
+                    x+(cLength*openEdge.ey), y+(cLength*openEdge.sx), 
+                    x+(cLength*openEdge.sy), y+(cLength*openEdge.ex), 
                 );
             grd.addColorStop(0, "rgba(0,0,0,0)");
             grd.addColorStop(1, color);
             context.fillStyle = grd;
-            context.fillRect(x, y, cWidth, cHeight);
+            context.fillRect(x, y, cLength, cLength);
             
             //SAVE FOR PATH HELP DRAWING MAYBE
-            //let grd = context.createRadialGradient(x,y,cWidth/5,x,y,cWidth/1.5);
+            //let grd = context.createRadialGradient(x,y,cLength/5,x,y,cLength1.5);
             //grd.addColorStop(0, color);
             //grd.addColorStop(1, "rgba(0,0,0,0)");
             //context.beginPath();
             //context.moveTo(x, y);
-            //context.arc(x, y, cWidth/1.5, 0, Math.PI/2);
+            //context.arc(x, y, cLength/1.5, 0, Math.PI/2);
             //context.fillStyle = grd;
             //context.fill();
         }
@@ -113,13 +119,13 @@ let Graphics = function() {
 
             for (let [key, w] of Object.entries(walls)) {
 
-                let x = cell.x*cWidth + (key === '-1' ? cWidth-wThickW:0);
-                let y = cell.y*cHeight + (key === '-2' ? cHeight-wThickH:0);
+                let x = cell.x*cLength+ (key === '-1' ? cLength-wThick:0);
+                let y = cell.y*cLength + (key === '-2' ? cLength-wThick:0);
                
-                w.sx-w.ex === 0 ? y-=wThickH : x-=wThickW;
+                w.sx-w.ex === 0 ? y-=wThick : x-=wThick;
                 for (let i = 0; i <= wallRatio+1; i++) {
-                    context.drawImage(imgWall, x, y, wThickW + 0.5, wThickH + 0.5);
-                    w.sx-w.ex === 0 ? y+=wThickH : x+=wThickW;
+                    context.drawImage(imgWall, x, y, wThick + 0.5, wThick + 0.5);
+                    w.sx-w.ex === 0 ? y+=wThick : x+=wThick;
                 }
             }
         };
@@ -149,16 +155,16 @@ let Graphics = function() {
 
         function drawLines(cell) {
             for (let adj of cell.children.concat(cell.parent)) {
-                context.moveTo((cell.x+0.5)*cWidth, (cell.y+0.5)*cHeight);
-                context.lineTo((adj?.x+0.5)*cWidth, (adj?.y+0.5)*cHeight);
+                context.moveTo((cell.x+0.5)*cLength (cell.y+0.5)*cLength);
+                context.lineTo((adj?.x+0.5)*cLength, (adj?.y+0.5)*cLength);
             }
         };
 
         function RenderSolution(solution) {
             context.beginPath();
             for (let i = 0; i < solution.length-1; i++) {
-                context.moveTo((solution[i].x+0.5)*cWidth, (solution[i].y+0.5)*cHeight);
-                context.lineTo((solution[i+1].x+0.5)*cWidth, (solution[i+1].y+0.5)*cHeight);
+                context.moveTo((solution[i].x+0.5)*cLength (solution[i].y+0.5)*cLength);
+                context.lineTo((solution[i+1].x+0.5)*cLength, (solution[i+1].y+0.5)*cLength);
             };
             context.closePath();
             context.strokeStyle = 'rgb(0, 255, 255)';
@@ -173,8 +179,36 @@ let Graphics = function() {
         };
     };
 
+    function CharacterRenderer(spec) {
+        let character = spec.character;
+        function Render() {
+            let x = (character.x + 0.5)*cLength;
+            let y = (character.y + 0.5)*cLength;
+            let radius = ((cLength - 2*wThick)/2)*0.8;
+            let offset = radius/2;
+            let grd = context.createRadialGradient(
+                x+offset,y-offset,0,
+                x+offset,y-offset,radius+offset
+            );
+            grd.addColorStop(0, "rgba(255,255,255,1)");
+            grd.addColorStop(1, "rgba(0,55,55,1)");
+            context.beginPath();
+            context.moveTo(x, y);
+            context.arc(x, y, radius, 0, 2*Math.PI);
+            context.fillStyle = grd;
+            context.fill();
+            context.closePath();
+        };
+
+        return {
+            Render : Render,
+        };
+    };
+
     return {
         clear : clear,
+        InitRenderer : InitRenderer,
         MazeRenderer : MazeRenderer,
-    };
+        CharacterRenderer : CharacterRenderer,
+    }; 
 };

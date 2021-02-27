@@ -6,41 +6,65 @@
 'use strict';
 
 let Input = function() {
-    function Keyboard() {
-        let that = {
-                keys : {},
-                handlers : {}
-            };
+    Keyboard = function() {
+        let keys = {};
+        let handlers = {};
         
         function keyPress(e) {
-            that.keys[e.key] = e.timeStamp;
+            keys[e.key]?.oldPress = true;
+            keys[e.key] = e.timeStamp;
         }
         
         function keyRelease(e) {
-            delete that.keys[e.key];
+            delete keys[e.key];
         }
         
-        that.registerCommand = function(key, handler) {
-            that.handlers[key] = handler;
+        RegisterCommand = function(keys, handler) {
+            for (let key in keys) {
+                handlers[key] = handler();
+            };
         };
 
-        that.update = function(elapsedTime) {
-            for (let key in that.keys) {
-                if (that.keys.hasOwnProperty(key)) {
-                    if (that.handlers[key]) {
-                        that.handlers[key](elapsedTime);
-                    }
-                }
+        RegisterGroupCommands = function(keys, handler, spec) {
+            let groupHandle = handler(spec);
+            for (let key in keys) {
+                handlers[key] = groupHandle.handle();
+            };
+        };
+
+        Update = function(elapsedTime) {
+            for (let key in keys) {
+                handlers[key](elapsedTime);
             }
         };
 
         window.addEventListener('keydown', keyPress);
         window.addEventListener('keyup', keyRelease);
         
-        return that;
+        return {
+            handlers : handlers,
+            keys : keys,
+            RegisterCommand : RegisterCommand,
+            Update : Update,
+        };
     }
 
     return {
         Keyboard : Keyboard
     };
+
+    Handlers = function() {
+
+        CharacterMovement = function(spec) {
+            Handel = function(elapsedTime) {
+            }
+            return  {
+                Handel : Handel,
+            };
+        }
+
+        return {
+            CharacterMovement : CharacterMovement,
+        };
+    }
 };
