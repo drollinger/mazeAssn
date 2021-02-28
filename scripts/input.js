@@ -8,7 +8,7 @@
 'use strict';
 
 let Input = function() {
-    Keyboard = function() {
+    let Keyboard = function() {
         let keys = {};
         let handlers = {};
         
