@@ -63,6 +63,7 @@ let MazeHandlers = function(spec) {
                         solution.push(maze[character.y][character.x]);
                         correctDir = false;
                     };
+
                     //Character Movement
                     character[dir] += inc;
                     let newSquare = maze[character.y][character.x];
@@ -70,8 +71,25 @@ let MazeHandlers = function(spec) {
                         character.tracks.push(newSquare);
                         score.points += correctDir ? 5 : -2;
                     }
+
                     //Turn off hint on movement
                     toggles.hint = false;
+
+                    //Handle Game Over
+                    if (solution.length == 0) {
+                        score.gameOver = true;
+                        let hscores = score.highscores[mazeObj.GetSize()];
+                        let isHigh = hscores.length > 5 ? false : true;
+                        for (let s of hscores) {
+                            if (score.points > s) isHigh = true;
+                        };
+
+                        if (isHigh) {
+                            hscores.push(score.points);
+                            hscores.sort(function(a, b){return b-a});
+                            if (hscores.length > 5) hscores.pop();
+                        };
+                    };
                 };
             };
         });

@@ -84,8 +84,7 @@ function main() {
     };
     
     function update(elapsedTime) {
-        if (solution.length == 0) score.gameOver = true;
-        else score.time += elapsedTime;
+        if (!score.gameOver) score.time += elapsedTime;
     };
     
     function render() {
