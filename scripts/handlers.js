@@ -11,6 +11,21 @@ let MazeHandlers = function(spec) {
     let solution = spec.solution;
     let toggles = spec.toggles;
 
+    let MoveUp = move('y', -1);
+    let MoveDown = move('y', 1);
+    let MoveLeft = move('x', -1);
+    let MoveRight = move('x', 1);
+
+    let ToggleSol = onPressOnly(function() {
+        toggles.solPath = !toggles.solPath;
+    });
+    let ToggleCrumbs = onPressOnly(function() {
+        toggles.crumbs = !toggles.crumbs;
+    });
+    let ToggleHint = onPressOnly(function() {
+        toggles.hint = !toggles.hint;
+    });
+
     function onPressOnly(f) {
         return (function(key, elapsedTime) {
             if (!key.heldPress) f();
@@ -30,35 +45,15 @@ let MazeHandlers = function(spec) {
                     };
                     //Character Movement
                     character[dir] += inc;
+                    let newSquare = maze[character.y][character.x];
+                    if (character.tracks.indexOf(newSquare)===-1) character.tracks.push(newSquare);
+                    character.tracks
+                    //Turn off hint on movement
+                    toggles.hint = false;
                 };
             };
         });
     };
-
-    let MoveUp = move('y', -1);
-    let MoveDown = move('y', 1);
-    let MoveLeft = move('x', -1);
-    let MoveRight = move('x', 1);
-
-    let ToggleSol = onPressOnly(function() {
-        toggles.solPath = !toggles.solPath;
-    });
-    let ToggleCrumbs = onPressOnly(function() {
-        toggles.crumbs = !toggles.crumbs;
-    });
-    let ToggleHint = onPressOnly(function() {
-        toggles.hint = !toggles.hint;
-    });
-    
-    //GroupCharacterMovement = function(spec) {
-    //    let 
-    //    Handel = function(elapsedTime) {
-
-    //    }
-    //    return  {
-    //        Handel : Handel,
-    //    };
-    //}
 
     return {
         MoveUp : MoveUp,

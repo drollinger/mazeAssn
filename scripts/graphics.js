@@ -162,15 +162,21 @@ let Graphics = function() {
 
         function RenderSolution(solution) {
             context.beginPath();
-            for (let i = 0; i < solution.length-1; i++) {
-                context.moveTo((solution[i]?.x+0.5)*cLength, (solution[i]?.y+0.5)*cLength);
-                context.lineTo((solution[i+1]?.x+0.5)*cLength, (solution[i+1]?.y+0.5)*cLength);
-                if(!solution[i]) { console.log(solution); };
-            };
+            for (let cell of solution) {
+                let x = (cell.x+0.5)*cLength;
+                let y = (cell.y+0.5)*cLength;
+                let radius = ((cLength - 2*wThick)/2);
+                let grd = context.createRadialGradient(x,y,0,x,y,radius);
+                grd.addColorStop(0, "rgba(0,0,0,0)");
+                grd.addColorStop(.3, "rgba(0,0,0,0)");
+                grd.addColorStop(.7, "rgba(250, 250, 50, 1)");
+                grd.addColorStop(1, "rgba(0,0,0,0)");
+                context.moveTo(x, y);
+                context.arc(x, y, radius, 0, 2*Math.PI);
+                context.fillStyle = grd;
+                context.fill();
+            }
             context.closePath();
-            context.strokeStyle = 'rgb(0, 255, 255)';
-            context.lineWidth = 6;
-            context.stroke();
         };
 
         return {
@@ -182,7 +188,7 @@ let Graphics = function() {
 
     function CharacterRenderer(spec) {
         let character = spec.character;
-        function Render() {
+        let Render = function() {
             let x = (character.x + 0.5)*cLength;
             let y = (character.y + 0.5)*cLength;
             let radius = ((cLength - 2*wThick)/2)*0.8;
@@ -201,8 +207,30 @@ let Graphics = function() {
             context.closePath();
         };
 
+        let RenderCrumbs = function() {
+            context.beginPath();
+            for (let cell of character.tracks) {
+                if (cell.x != character.x || cell.y != character.y) {
+                    let x = (cell.x+0.5)*cLength;
+                    let y = (cell.y+0.5)*cLength;
+                    let radius = ((cLength - 2*wThick)/2)*0.3;
+                    let offset = radius/2;
+                    let grd = context.createRadialGradient(
+                        x+offset,y-offset,0,
+                        x+offset,y-offset,radius+offset
+                    );
+                    context.moveTo(x, y);
+                    context.arc(x, y, radius, 0, 2*Math.PI);
+                };
+            };
+            context.fillStyle = 'rgba(171, 148, 58,1)';
+            context.fill();
+            context.closePath();
+        };
+
         return {
             Render : Render,
+            RenderCrumbs : RenderCrumbs,
         };
     };
 

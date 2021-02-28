@@ -23,6 +23,7 @@ function main() {
     let character = {
         x : start.x,
         y : start.y,
+        tracks : [maze.GetMaze()[start.y][start.x]],
     };
     let characterRenderer = graphics.CharacterRenderer( {
             character : character,
@@ -75,8 +76,8 @@ function main() {
         mazeRenderer.Render();
         characterRenderer.Render();
         if(toggles.solPath) mazeRenderer.RenderSolution(solution);
-        if(toggles.hint) mazeRenderer.RenderSolution(solution);
-        if(toggles.crumbs) mazeRenderer.RenderSolution();
+        if(toggles.hint) mazeRenderer.RenderSolution([solution[solution.length-1]]);
+        if(toggles.crumbs) characterRenderer.RenderCrumbs();
     };
     
     function processInput(elapsedTime) {
