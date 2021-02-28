@@ -2,7 +2,7 @@ body {
     background-image: url("../images/lava.jpg");
 }
 
-h1, h2, li {
+h1, h2, h3, li, #credits {
     color: white;
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
@@ -18,6 +18,10 @@ li {
 #canvas {
     width: 100%;
     max-width: 1000px;
+}
+
+#credits {
+    padding-top: 500px;
 }
 
 

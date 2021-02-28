@@ -47,6 +47,7 @@ let Graphics = function() {
         let mins = Math.floor(score.time/60000);
         document.getElementById('time').innerHTML = `${mins}:${seconds}:${milSec}`;
         document.getElementById('score').innerHTML = `${score.points}`;
+        document.getElementById('score-size').innerHTML = `FOR ${size}X${size}`;
         if (score.gameOver) {
             context.fillStyle = 'rgba(0,0,0,.7)';
             context.fillRect(0, 0, canvas.width, canvas.height);
