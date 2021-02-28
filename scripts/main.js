@@ -15,6 +15,10 @@ function main() {
     maze.NewMaze(5);
     let solution = maze.GetPath();
     let start = solution.pop();
+    let score = {
+        time : 0,
+        points : 0,
+    };
 
     graphics.InitRenderer( {
             maze : maze,
@@ -45,6 +49,7 @@ function main() {
         solution : solution,
         character : character,
         toggles : toggles,
+        score : score,
     });
     keyInput.RegisterCommand(['a', 'j', 'ArrowLeft'], mazeHandlers.MoveLeft);
     keyInput.RegisterCommand(['d', 'l', 'ArrowRight'], mazeHandlers.MoveRight);
@@ -71,7 +76,7 @@ function main() {
     };
     
     function update(elapsedTime) {
-
+        score.time += elapsedTime;
     };
     
     function render() {
@@ -81,6 +86,7 @@ function main() {
         if(toggles.hint) mazeRenderer.RenderSolution([solution[solution.length-1]]);
         if(toggles.crumbs) characterRenderer.RenderCrumbs();
         characterRenderer.Render();
+        graphics.RenderScore(score);
     };
     
     function processInput(elapsedTime) {

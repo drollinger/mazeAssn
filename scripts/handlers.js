@@ -11,6 +11,7 @@ let MazeHandlers = function(spec) {
     let character = spec.character;
     let solution = spec.solution;
     let toggles = spec.toggles;
+    let score = spec.score;
 
     let MoveUp = move('y', -1);
     let MoveDown = move('y', 1);
@@ -36,6 +37,8 @@ let MazeHandlers = function(spec) {
             character.x = start.x;
             character.y = start.y;
             character.tracks = [mazeObj.GetMaze()[start.y][start.x]];
+            score.time = 0;
+            score.points = 0;
             update({maze:mazeObj});
         });
     };

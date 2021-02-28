@@ -41,6 +41,13 @@ let Graphics = function() {
         wThick = cLength/wallRatio;
     }
 
+    function RenderScore(score) {
+        let milSec = Math.floor((score.time%1000)/100);
+        let seconds = Math.floor(score.time/1000)%60;
+        let mins = Math.floor(score.time/60000);
+        document.getElementById("time").innerHTML = `${mins}:${seconds}:${milSec}`
+    }
+
     function MazeRenderer(spec) {
         let imgFloor = new Image();
         imgFloor.isReady = false;
@@ -247,5 +254,6 @@ let Graphics = function() {
         UpdateRenderer : UpdateRenderer,
         MazeRenderer : MazeRenderer,
         CharacterRenderer : CharacterRenderer,
+        RenderScore : RenderScore,
     }; 
 };
