@@ -12,7 +12,7 @@ function main() {
     let keyInput = input.Keyboard();
     let graphics = Graphics();
     let maze = Maze();
-    maze.NewMaze(10);
+    maze.NewMaze(5);
     let solution = maze.GetPath();
     let start = solution.pop();
 
@@ -41,7 +41,7 @@ function main() {
     };
 
     let mazeHandlers = MazeHandlers( {
-        maze : maze.GetMaze(),
+        maze : maze,
         solution : solution,
         character : character,
         toggles : toggles,
@@ -53,6 +53,9 @@ function main() {
     keyInput.RegisterCommand(['p'], mazeHandlers.ToggleSol);
     keyInput.RegisterCommand(['b'], mazeHandlers.ToggleCrumbs);
     keyInput.RegisterCommand(['h'], mazeHandlers.ToggleHint);
+    document.querySelectorAll('.newGame').forEach(item => {
+        item.addEventListener('click', mazeHandlers.NewGame(item.getAttribute("data-size"), graphics.UpdateRenderer));
+    });
 
     let prevTime = performance.now();
     //The Main Game Loop
@@ -74,10 +77,10 @@ function main() {
     function render() {
         graphics.clear();
         mazeRenderer.Render();
-        characterRenderer.Render();
         if(toggles.solPath) mazeRenderer.RenderSolution(solution);
         if(toggles.hint) mazeRenderer.RenderSolution([solution[solution.length-1]]);
         if(toggles.crumbs) characterRenderer.RenderCrumbs();
+        characterRenderer.Render();
     };
     
     function processInput(elapsedTime) {

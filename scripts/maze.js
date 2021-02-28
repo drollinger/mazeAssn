@@ -75,6 +75,7 @@ let Maze = function() {
 
     function solveMaze() {
         //start at root
+        solution.length = 0;
         let node = root;
         let subNode = {
             node : root,

@@ -6,7 +6,8 @@
 'use strict';
 
 let MazeHandlers = function(spec) {
-    let maze = spec.maze;
+    let mazeObj = spec.maze;
+    let maze = mazeObj.GetMaze();
     let character = spec.character;
     let solution = spec.solution;
     let toggles = spec.toggles;
@@ -25,6 +26,19 @@ let MazeHandlers = function(spec) {
     let ToggleHint = onPressOnly(function() {
         toggles.hint = !toggles.hint;
     });
+
+    let NewGame = function(size, update) {
+        return (function() {
+            mazeObj.NewMaze(size);
+            maze = mazeObj.GetMaze();
+            solution = mazeObj.GetPath();
+            let start = solution.pop();
+            character.x = start.x;
+            character.y = start.y;
+            character.tracks = [mazeObj.GetMaze()[start.y][start.x]];
+            update({maze:mazeObj});
+        });
+    };
 
     function onPressOnly(f) {
         return (function(key, elapsedTime) {
@@ -63,5 +77,6 @@ let MazeHandlers = function(spec) {
         ToggleSol : ToggleSol,
         ToggleCrumbs : ToggleCrumbs,
         ToggleHint : ToggleHint,
+        NewGame : NewGame,
     };
 };

@@ -34,6 +34,13 @@ let Graphics = function() {
         wThick = cLength/wallRatio;
     }
 
+    function UpdateRenderer(spec) {
+        maze = spec.maze.GetMaze();
+        size = spec.maze.GetSize();
+        cLength = Math.min(canvas.width, canvas.height)/size;
+        wThick = cLength/wallRatio;
+    }
+
     function MazeRenderer(spec) {
         let imgFloor = new Image();
         imgFloor.isReady = false;
@@ -237,6 +244,7 @@ let Graphics = function() {
     return {
         clear : clear,
         InitRenderer : InitRenderer,
+        UpdateRenderer : UpdateRenderer,
         MazeRenderer : MazeRenderer,
         CharacterRenderer : CharacterRenderer,
     }; 
