@@ -39,6 +39,7 @@ let MazeHandlers = function(spec) {
             character.tracks = [mazeObj.GetMaze()[start.y][start.x]];
             score.time = 0;
             score.points = 0;
+            score.gameOver = false;
             update({maze:mazeObj});
         });
     };
@@ -53,18 +54,22 @@ let MazeHandlers = function(spec) {
         return onPressOnly(function() {
             let cell = maze[character.y][character.x];
             for (let adj of cell.children.concat(cell.parent)) {
-                if (adj?.[dir] === cell[dir] + inc) {
+                if (adj?.[dir] === cell[dir] + inc && !score.gameOver) {
                     //Solution Handler
+                    let correctDir = true;
                     let next = solution.pop();
-                    if (character[dir]+inc != next[dir]) {
+                    if (character[dir]+inc != next?.[dir]) {
                         solution.push(next);
                         solution.push(maze[character.y][character.x]);
+                        correctDir = false;
                     };
                     //Character Movement
                     character[dir] += inc;
                     let newSquare = maze[character.y][character.x];
-                    if (character.tracks.indexOf(newSquare)===-1) character.tracks.push(newSquare);
-                    character.tracks
+                    if (character.tracks.indexOf(newSquare)===-1) {
+                        character.tracks.push(newSquare);
+                        score.points += correctDir ? 5 : -2;
+                    }
                     //Turn off hint on movement
                     toggles.hint = false;
                 };

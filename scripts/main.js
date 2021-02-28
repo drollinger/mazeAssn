@@ -15,9 +15,17 @@ function main() {
     maze.NewMaze(5);
     let solution = maze.GetPath();
     let start = solution.pop();
+    let highscores = {
+        '5':[],
+        '10':[],
+        '15':[],
+        '20':[],
+    };
     let score = {
         time : 0,
         points : 0,
+        gameOver : false,
+        highscores : highscores,
     };
 
     graphics.InitRenderer( {
@@ -76,7 +84,8 @@ function main() {
     };
     
     function update(elapsedTime) {
-        score.time += elapsedTime;
+        if (solution.length == 0) score.gameOver = true;
+        else score.time += elapsedTime;
     };
     
     function render() {

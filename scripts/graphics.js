@@ -45,7 +45,29 @@ let Graphics = function() {
         let milSec = Math.floor((score.time%1000)/100);
         let seconds = Math.floor(score.time/1000)%60;
         let mins = Math.floor(score.time/60000);
-        document.getElementById("time").innerHTML = `${mins}:${seconds}:${milSec}`
+        document.getElementById('time').innerHTML = `${mins}:${seconds}:${milSec}`;
+        document.getElementById('score').innerHTML = `${score.points}`;
+        if (score.gameOver) {
+            context.fillStyle = 'rgba(0,0,0,.7)';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.font = "30px Comic Sans MS";
+            context.fillStyle = "rgba(252, 57, 3,1)";
+            context.textAlign = "center";
+            context.fillText("Game Over", canvas.width/2, canvas.height/2.5);
+            context.fillText(`Score: ${score.points}`, canvas.width/2, canvas.height/2);
+        };
+        let highList = document.getElementById('highscores');
+        highList.innerHTML = "";
+        for (let i=0; i<5; i++) {
+            let text = 'None';
+            if (score.highscores[size][i] != undefined) {
+                text = score.highscores[size][i];
+            }
+            score
+            let e = document.createElement('li');
+            e.appendChild(document.createTextNode(text));
+            highList.appendChild(e);
+        }
     }
 
     function MazeRenderer(spec) {
@@ -106,6 +128,7 @@ let Graphics = function() {
             let adj = cell.parent ?? cell.children[0];
             let openEdge = coords[(cell.x-adj.x)+2*(cell.y-adj.y)];
             let x = cell.x*cLength;
+
             let y = cell.y*cLength;
 
             let grd = context.createLinearGradient(
