@@ -1,7 +1,9 @@
 /**************************************************
  * Name: Dallin Drollinger
  * A#: A01984170
- * Description: 
+ * Description: Our input processing adapted from
+ *   provided code. The main update function is
+ *   what calls registered functions
  *************************************************/
 'use strict';
 
@@ -10,6 +12,19 @@ let Input = function() {
         let keys = {};
         let handlers = {};
         
+        let RegisterCommand = function(keyList, handler) {
+            for (let key of keyList) {
+                handlers[key] = handler;
+            };
+        };
+
+        let Update = function(elapsedTime) {
+            for (let key in keys) {
+                handlers[key]?.(keys[key], elapsedTime);
+                keys[key].heldPress = true;
+            }
+        };
+
         function keyPress(e) {
             if (!keys[e.key]) {
                 keys[e.key] = {};
@@ -21,26 +36,6 @@ let Input = function() {
         function keyRelease(e) {
             delete keys[e.key];
         }
-        
-        let RegisterCommand = function(keyList, handler) {
-            for (let key of keyList) {
-                handlers[key] = handler;
-            };
-        };
-
-        let RegisterGroupCommands = function(keyList, handler, spec) {
-            let groupHandle = handler(spec);
-            for (let key of keyList) {
-                handlers[key] = groupHandle.handle;
-            };
-        };
-
-        let Update = function(elapsedTime) {
-            for (let key in keys) {
-                handlers[key]?.(keys[key], elapsedTime);
-                keys[key].heldPress = true;
-            }
-        };
 
         window.addEventListener('keydown', keyPress);
         window.addEventListener('keyup', keyRelease);

@@ -1,7 +1,7 @@
 /**************************************************
  * Name: Dallin Drollinger
  * A#: A01984170
- * Description: 
+ * Description: Contains all handlers for input
  *************************************************/
 'use strict';
 

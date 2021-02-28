@@ -1,7 +1,11 @@
 /**************************************************
  * Name: Dallin Drollinger
  * A#: A01984170
- * Description: 
+ * Description: Maze holds function needed to 
+ *   process what the maze is. It uses a tree
+ *   structure to find the longest path and 
+ *   solution and the Prim algorithm to generate
+ *   the maze.
  *************************************************/
 'use strict';
 

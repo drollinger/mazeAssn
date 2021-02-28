@@ -1,7 +1,10 @@
 /**************************************************
  * Name: Dallin Drollinger
  * A#: A01984170
- * Description: 
+ * Description: This contains the Graphics function
+ *   needed to render any objects on the screen.
+ *   The main sub-function MazeRenderer is used
+ *   for all maze rendering.
  *************************************************/
 'use strict';
 
@@ -140,16 +143,6 @@ let Graphics = function() {
             grd.addColorStop(1, color);
             context.fillStyle = grd;
             context.fillRect(x, y, cLength, cLength);
-            
-            //SAVE FOR PATH HELP DRAWING MAYBE
-            //let grd = context.createRadialGradient(x,y,cLength/5,x,y,cLength1.5);
-            //grd.addColorStop(0, color);
-            //grd.addColorStop(1, "rgba(0,0,0,0)");
-            //context.beginPath();
-            //context.moveTo(x, y);
-            //context.arc(x, y, cLength/1.5, 0, Math.PI/2);
-            //context.fillStyle = grd;
-            //context.fill();
         }
 
         function drawWall(cell) {

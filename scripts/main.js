@@ -1,13 +1,13 @@
 /**************************************************
  * Name: Dallin Drollinger
  * A#: A01984170
- * Description: 
+ * Description: The main function with 
+ *  inizialization of values and the game loop
  *************************************************/
 'use strict';
 
 function main() {
     //Initialize
-    //  Create Maze
     let input = Input();
     let keyInput = input.Keyboard();
     let graphics = Graphics();
@@ -71,6 +71,8 @@ function main() {
     });
 
     let prevTime = performance.now();
+    requestAnimationFrame(gameLoop);
+
     //The Main Game Loop
     function gameLoop(timestamp) {
         let elapsedTime = timestamp - prevTime;
@@ -100,7 +102,5 @@ function main() {
     function processInput(elapsedTime) {
         keyInput.Update(elapsedTime);
     }
-
-    requestAnimationFrame(gameLoop);
 };
 
